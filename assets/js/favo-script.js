@@ -63,8 +63,12 @@ jQuery(function($){
 	}
 
 	$(".favo .favo-button").on("click", function(){
-		var product_id = $(this).data("product-id");
-		$(this).hide();
-		action_favo(product_id);
+		if ( favo_object.required_login == '' || ( favo_object.required_login == 'yes' && favo_object.is_login ) ) {
+			var product_id = $(this).data("product-id");
+			$(this).hide();
+			action_favo(product_id);
+		} else {
+			alert( favo_object.required_login_message );
+		}
 	});
 });

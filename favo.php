@@ -60,7 +60,7 @@ if ( ! class_exists( 'Favo' ) ) {
 
 			add_action( 'wp_enqueue_scripts', array( $this, 'wp_enqueue_scripts' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
-			add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ) , array( $this, 'plugin_add_settings_link' ) );
+			add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( $this, 'plugin_add_settings_link' ) );
 
 		}
 
@@ -101,7 +101,7 @@ if ( ! class_exists( 'Favo' ) ) {
 			if ( is_favo_db_exist() == false ) {
 				favo_install();
 			}
-			if ( get_page_by_title( 'Favorite List', ARRAY_A, 'page' ) == NULL ) {
+			if ( get_page_by_title( 'Favorite List', ARRAY_A, 'page' ) == null ) {
 				favo_create_page();
 			}
 			if ( ! get_option( 'favo_settings' ) ) {
@@ -146,10 +146,13 @@ if ( ! class_exists( 'Favo' ) ) {
 			$favo_object = array(
 				'ajax_url'               => admin_url( 'admin-ajax.php' ),
 				'button_type'            => favo_setting( 'type_active' ),
+				'required_login'         => favo_setting( 'required_login' ),
+				'is_login'               => is_user_logged_in(),
 				'on_val'                 => $on_val,
 				'off_val'                => $off_val,
 				'add_success_message'    => favo_setting( 'add_success' ),
 				'remove_success_message' => favo_setting( 'remove_success' ),
+				'required_login_message' => favo_setting( 'required_login_message' ),
 			);
 
 			wp_enqueue_style( 'favo-style', FAVO_URL . '/assets/css/favo-style.css', array( 'storefront-icons', 'storefront-woocommerce-style' ) );
