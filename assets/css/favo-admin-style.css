@@ -1,0 +1,144 @@
+#favo-setting * {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+#favo-setting .form-section {
+	background-color: #fff;
+	margin-bottom: 15px;
+	font-size: 0;
+	border: 1px solid #eee;
+}
+#favo-setting .form-section .form-section-title {
+	padding: 10px;
+	font-size: 13px;
+	margin: 0;
+	border-bottom: 1px solid #eee;
+}
+#favo-setting .form-section .input-row {
+	font-size: 0;
+	padding-top: 10px;
+	padding: 15px;
+}
+#favo-setting .form-section .input-row > * {
+	display: inline-block;
+	font-size: 13px;
+	padding-right: 15px;
+	vertical-align: top;
+}
+#favo-setting .form-section .input-row > label {
+	width: 20%;
+}
+#favo-setting .form-section .input-field {
+	width: 30%;
+}
+#favo-setting .form-section .input-field-full {
+	width: 50%;
+}
+#favo-setting .form-section .input-field input[type=text], #favo-setting .form-section .input-field select {
+	width: 100%;
+}
+#favo-setting .form-section .helper {
+	width: 50%;
+	opacity: 0.7;
+}
+#favo-setting .form-section .helper-full {
+	padding-top: 30px;
+}
+#favo-setting .code-editor {
+	height: 200px;
+	border: 1px solid #ddd;
+}
+#favo-setting .image-preview-wrapper {
+    margin-top: 10px;
+    background: #f7f8f9;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+
+
+/** About  */
+#favo-page-wrap *,
+#favo-page-wrap *:before,
+#favo-page-wrap *:after{
+    box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    -moz-box-sizing:border-box
+}
+#favo-page-wrap .row {
+    margin-left: -10px;
+    margin-right: -10px;
+}
+#favo-page-wrap .row:after {
+    content: '';
+    display: table;
+    clear: both;
+}
+#favo-page-wrap .col-half {
+    width: 50%;
+    padding: 0 10px;
+    float: left;
+}
+#favo-page-wrap .col-third {
+    width: 33.3333%;
+    padding: 0 10px;
+    float: left;
+}
+#favo-page-wrap .about-content {
+    background-color: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+#favo-page-wrap .banner-content {
+    padding: 20px 30px;
+    color: #ddd;
+}
+#favo-page-wrap .more-content h3 {
+    margin-top: 0;
+}
+#favo-page-wrap .more-text h3 {
+    color: #555;
+}
+#favo-page-wrap .more-content {
+    background-color: #fff;
+    padding: 20px;
+}
+#favo-page-wrap .more-btn .dashicons {
+    margin-left: 5px;
+    height: 28px;
+    line-height: 28px;
+}
+
+#favo-page-wrap .content {
+    padding-top: 15px;
+}
+#favo-page-wrap .content .tab-content {
+    display: none;
+}
+#favo-page-wrap .content .tab-content.active {
+    display: block;
+}
+#favo-page-wrap .content .tab-content #poststuff {
+    padding: 0;
+}
+#favo-page-wrap .wp-editor-tabs{
+    box-sizing: unset;
+    -webkit-box-sizing: unset;
+    -moz-box-sizing: unset;
+}
+#favo-page-wrap .full-width {
+    width: 100%;
+}
+#favo-page-wrap .wp-switch-editor {
+    height: auto;
+}
+#favo-page-wrap .wp-editor-tools:after {
+    display: none;
+}
+#favo-page-wrap .submit-box {
+    padding: 15px;
+    text-align: right;
+    background-color: #fff;
+    border: 1px solid #eee;
+}

@@ -1,0 +1,15 @@
+.favo img.favo-loading.on, ul.products li.product > .favo > img.favo-loading.on, ul.products li.product > .favo .favo_button_icon img.favo-button {
+	display: inline-block;
+    margin: -5px 2px -5px 10px;
+}
+.favo img.favo-loading, ul.products li.product > .favo > img.favo-loading {
+	display: none;
+	margin: 0 7px;
+}
+.favo .favo-button {
+	cursor: pointer;
+	display: inline-block;
+}
+.favo .favo_button_icon {
+	font-weight: bold;
+}
