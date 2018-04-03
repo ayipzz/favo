@@ -44,25 +44,31 @@ jQuery(function($){
 				$(".favo .favo-loading").removeClass("on");
 				var current_button_favo = $(".favo .favo-button[data-product-id=\""+product_id+"\"]");
 				if(current_button_favo.hasClass("on")){
-					alert(favo_object.remove_success_message);
+					if ( favo_object.enable_remove_success_message == 'yes' ) {
+						alert(favo_object.remove_success_message);
+					}
+					
 					if ( favo_object.button_type == 'text' ) {
 						current_button_favo.removeClass("on").addClass("off").html(favo_object.off_val).show();
 					} else if ( favo_object.button_type == 'image' ) {
 						current_button_favo.removeClass("on").addClass("off").attr("src",favo_object.off_val).show();
 					}
 				} else {
-					alert(favo_object.add_success_message);
+					if ( favo_object.enable_add_success_message == 'yes' ) {
+						alert(favo_object.add_success_message);
+					}
 					if ( favo_object.button_type == 'text' ) {
 						current_button_favo.removeClass("off").addClass("on").html(favo_object.on_val).show();
 					} else if ( favo_object.button_type == 'image' ) {
 						current_button_favo.removeClass("off").addClass("on").attr("src",favo_object.on_val).show();
 					}
 				}
+				$(".favo[data-product-id=\""+product_id+"\"] span.count").html(response);
 			}
 		});
 	}
 
-	$(".favo .favo-button").on("click", function(){
+	$(".woocommerce").on("click", ".favo-button", function(){
 		if ( favo_object.required_login == '' || ( favo_object.required_login == 'yes' && favo_object.is_login ) ) {
 			var product_id = $(this).data("product-id");
 			$(this).hide();

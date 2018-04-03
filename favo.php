@@ -144,18 +144,21 @@ if ( ! class_exists( 'Favo' ) ) {
 				$off_val = wp_get_attachment_url( favo_setting( 'image_val_off' ) );
 			}
 			$favo_object = array(
-				'ajax_url'               => admin_url( 'admin-ajax.php' ),
-				'button_type'            => favo_setting( 'type_active' ),
-				'required_login'         => favo_setting( 'required_login' ),
-				'is_login'               => is_user_logged_in(),
-				'on_val'                 => $on_val,
-				'off_val'                => $off_val,
-				'add_success_message'    => favo_setting( 'add_success' ),
-				'remove_success_message' => favo_setting( 'remove_success' ),
-				'required_login_message' => favo_setting( 'required_login_message' ),
+				'ajax_url'                      => admin_url( 'admin-ajax.php' ),
+				'button_type'                   => favo_setting( 'type_active' ),
+				'required_login'                => favo_setting( 'required_login' ),
+				'is_login'                      => is_user_logged_in(),
+				'on_val'                        => $on_val,
+				'off_val'                       => $off_val,
+				'favo_count'                    => favo_setting( 'favo_count' ),
+				'enable_add_success_message'    => favo_setting( 'enable_add_success_message' ),
+				'enable_remove_success_message' => favo_setting( 'enable_remove_success_message' ),
+				'add_success_message'           => favo_setting( 'add_success' ),
+				'remove_success_message'        => favo_setting( 'remove_success' ),
+				'required_login_message'        => favo_setting( 'required_login_message' ),
 			);
 
-			wp_enqueue_style( 'favo-style', FAVO_URL . '/assets/css/favo-style.css', array( 'storefront-icons', 'storefront-woocommerce-style' ) );
+			wp_enqueue_style( 'favo-style', FAVO_URL . '/assets/css/favo-style.css' );
 
 			wp_enqueue_script( 'favo-script', FAVO_URL . '/assets/js/favo-script.js', array( 'jquery' ) );
 			wp_localize_script( 'favo-script', 'favo_object', $favo_object );

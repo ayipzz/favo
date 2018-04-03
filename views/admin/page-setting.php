@@ -25,7 +25,7 @@
 				<div class="input-row">
 					<label for="favo_count">Display Favorite Number</label>
 					<div class="input-field">
-						<input type="checkbox" name="favo_count" id="favo_count" value="yes" <?php echo favo_setting('favo_count') == 'yes' ? 'checked' : ''; ?> disabled />
+						<input type="checkbox" name="favo_count" id="favo_count" value="yes" <?php echo favo_setting('favo_count') == 'yes' ? 'checked' : ''; ?> />
 					</div>
 					<div class="helper">
 						Displays the number of favorites in each product <i>(beta)</i>
@@ -40,7 +40,7 @@
 						User
 					</div>
 				</div>
-				<div class="input-row">
+				<!-- <div class="input-row">
 					<label for="favo_display_on">Display Button Position</label>
 					<div class="input-field">
 						<select name="display_position_button" id="display_position_button">
@@ -52,7 +52,7 @@
 						Choose position where your favorite button will appear.<br />
 						<code><b>Product Image :</b> only work on product loop</code>
 					</div>
-				</div>
+				</div> -->
 				<div class="input-row">
 					<label for="favo_display_on">Display Button On</label>
 					<div class="input-field">
@@ -136,6 +136,7 @@
 				<div class="input-row">
 					<label for="favo_enabled">Add Success Message</label>
 					<div class="input-field">
+						<input type="checkbox" name="enable_add_success_message" value="yes" <?php echo favo_setting('enable_add_success_message') == 'yes' ? 'checked' : ''; ?>> Enable<br /><br />
 						<input type="text" name="add_success_message" value="<?php echo favo_setting('add_success'); ?>">
 					</div>
 					<div class="helper">
@@ -145,6 +146,7 @@
 				<div class="input-row">
 					<label for="favo_display_on">Remove Success Message</label>
 					<div class="input-field">
+						<input type="checkbox" name="enable_remove_success_message" value="yes" <?php echo favo_setting('enable_remove_success_message') == 'yes' ? 'checked' : ''; ?>> Enable<br /><br />
 						<input type="text" name="remove_success_message" value="<?php echo favo_setting('remove_success'); ?>">
 					</div>
 					<div class="helper">

@@ -121,21 +121,23 @@ function favo_create_page() {
  */
 function favo_default_setting() {
 	$default_settings = array(
-		'enabled'                 => 'yes',
-		'favo_count'              => 'no',
-		'display_position_button' => 'after_add_to_cart',
-		'type_active'             => 'text',
-		'display_on'              => array(
+		'enabled'                       => 'yes',
+		'favo_count'                    => 'no',
+		'display_position_button'       => 'after_add_to_cart',
+		'type_active'                   => 'text',
+		'enable_add_success_message'    => 'no',
+		'enable_remove_success_message' => 'no',
+		'display_on'                    => array(
 			'single_product',
 			'loop_product',
 		),
-		'button'                  => array(
+		'button'                        => array(
 			'text' => array(
 				'val_on'  => 'Remove From Favorite',
 				'val_off' => 'Add to Favorite',
 			),
 		),
-		'messages'                => array(
+		'messages'                      => array(
 			'add_success_message'    => 'Product Added to favorite list',
 			'remove_success_message' => 'Product Removed from favorite list',
 		),

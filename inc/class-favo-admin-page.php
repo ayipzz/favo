@@ -112,6 +112,8 @@ if ( ! class_exists( 'Favo_Admin_Page' ) ) {
 					'display_position_button' => sanitize_text_field( $_POST['display_position_button'] ),
 					'type_active'             => sanitize_text_field( $_POST['favo_type'] ),
 					'display_on'              => $_POST['display_on'],
+					'enable_add_success_message' => sanitize_text_field( $_POST['enable_add_success_message'] ),
+					'enable_remove_success_message' => sanitize_text_field( $_POST['enable_remove_success_message'] ),
 					'button'                  => array(
 						'text'  => array(
 							'val_on'  => sanitize_text_field( $_POST['favo_text_val_on'] ),

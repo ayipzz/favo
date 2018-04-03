@@ -50,12 +50,12 @@ if ( ! class_exists( 'Favo_Front' ) ) {
 		 *
 		 * @version 1.0.0
 		 */
-		public function shortcode( $attr ) {
+		public function shortcode( $attr = array() ) {
 			global $product;
 
 			if ( $product ) :
 
-				$attr['class'] = isset( $attr['class'] ) ? $attr['class'] : '';
+				$class = isset( $attr['class'] ) ? $attr['class'] : '';
 				$icon_favorite = 'off';
 
 				// set icon favorite
@@ -75,7 +75,7 @@ if ( ! class_exists( 'Favo_Front' ) ) {
 					}
 				}
 
-				$component = '<span class="favo ' . $attr['class'] . '">';
+				$component = '<span class="favo ' . $class . '" data-product-id="' . $product->get_id() . '">';
 
 				$component .= '<img src="' . FAVO_URL . '/assets/images/loading.gif" class="favo-loading" data-product-id="' . $product->get_id() . '" />';
 
