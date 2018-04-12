@@ -44,15 +44,6 @@ if ( ! class_exists( 'Favo_Admin_Page' ) ) {
 				'dashicons-heart',
 				58
 			);
-
-			add_submenu_page(
-				'favo',
-				'Settings',
-				'Settings',
-				'manage_options',
-				'favo-settings',
-				array( $this, 'favo_settings_handler' )
-			);
 		}
 
 		/**
@@ -62,39 +53,11 @@ if ( ! class_exists( 'Favo_Admin_Page' ) ) {
 		 * @since 1.0.0
 		 */
 		public function favo_handler() {
-			$license_handler = new Tonjoo_License_Handler( 'favo', __FILE__ );
-			$license_handler->set_license_form_url( admin_url( 'admin.php?page=favo#license' ) );
-			$tabs   = apply_filters(
-				'favo_about_tabs', array(
-					'overview' => array(
-						'title'    => esc_html__( 'Overview', 'favo' ),
-						'template' => FAVO_PATH . 'views/admin/admin-about-overview.php',
-					),
-					'license'  => array(
-						'title'    => esc_html__( 'License', 'favo' ),
-						'template' => FAVO_PATH . 'views/admin/admin-about-license.php',
-					),
-					'upsell'   => array(
-						'title'    => esc_html__( 'Other Cool Stuff for Your Website', 'favo' ),
-						'template' => FAVO_PATH . 'views/admin/admin-about-upsell.php',
-					),
-				)
-			);
-			$upsell = new Tonjoo_Plugins_Upsell( 'favo' );
-			include_once FAVO_PATH . 'views/admin/page-dashboard.php';
-		}
-
-		/**
-		 * Callback favo admin page settings
-		 *
-		 * @version 1.0.0
-		 * @since 1.0.0
-		 */
-		public function favo_settings_handler() {
 			$favo_image_val_off = favo_setting( 'image_val_off' );
 			$favo_image_val_on  = favo_setting( 'image_val_on' );
 
 			wp_enqueue_media();
+			
 			include_once FAVO_PATH . 'views/admin/page-setting.php';
 		}
 
@@ -106,15 +69,15 @@ if ( ! class_exists( 'Favo_Admin_Page' ) ) {
 		public function favo_save_settings() {
 			if ( isset( $_POST['favo_field_setting'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['favo_field_setting'] ) ), 'favo_action_setting' ) ) {
 				$favo_settings = array(
-					'enabled'                 => sanitize_text_field( $_POST['favo_enabled'] ),
-					'favo_count'              => sanitize_text_field( $_POST['favo_count'] ),
-					'required_login'          => sanitize_text_field( $_POST['favo_required_login'] ),
-					'display_position_button' => sanitize_text_field( $_POST['display_position_button'] ),
-					'type_active'             => sanitize_text_field( $_POST['favo_type'] ),
-					'display_on'              => $_POST['display_on'],
-					'enable_add_success_message' => sanitize_text_field( $_POST['enable_add_success_message'] ),
+					'enabled'                       => sanitize_text_field( $_POST['favo_enabled'] ),
+					'favo_count'                    => sanitize_text_field( $_POST['favo_count'] ),
+					'required_login'                => sanitize_text_field( $_POST['favo_required_login'] ),
+					'display_position_button'       => sanitize_text_field( $_POST['display_position_button'] ),
+					'type_active'                   => sanitize_text_field( $_POST['favo_type'] ),
+					'display_on'                    => $_POST['display_on'],
+					'enable_add_success_message'    => sanitize_text_field( $_POST['enable_add_success_message'] ),
 					'enable_remove_success_message' => sanitize_text_field( $_POST['enable_remove_success_message'] ),
-					'button'                  => array(
+					'button'                        => array(
 						'text'  => array(
 							'val_on'  => sanitize_text_field( $_POST['favo_text_val_on'] ),
 							'val_off' => sanitize_text_field( $_POST['favo_text_val_off'] ),
@@ -124,7 +87,7 @@ if ( ! class_exists( 'Favo_Admin_Page' ) ) {
 							'val_off' => sanitize_text_field( $_POST['favo_image_val_off'] ),
 						),
 					),
-					'messages'                => array(
+					'messages'                      => array(
 						'add_success_message'    => sanitize_text_field( $_POST['add_success_message'] ),
 						'remove_success_message' => sanitize_text_field( $_POST['remove_success_message'] ),
 						'required_login_message' => sanitize_text_field( $_POST['required_login_message'] ),

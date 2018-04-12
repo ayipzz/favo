@@ -7,21 +7,31 @@ add_action( 'wp_ajax_nopriv_update_favo', 'ajax_update_favo_callback' );
 function ajax_update_favo_callback() {
 	global $wpdb;
 
-		$product_id = sanitize_text_field( $_POST['product_id'] );
-	$fav_action     = sanitize_text_field( $_POST['fav_action'] );
-	$fav_date       = date( 'Y-m-d H:i:s' );
-	$fav_user       = ( is_user_logged_in() ) ? wp_get_current_user()->ID : null;
-	$fav_ip         = favo_client_ip();
-
-	if ( $fav_action == 'insert' ) {
-		$wpdb->query( $wpdb->prepare( 'INSERT INTO ' . FAVO_DB_NAME . '(date_add,product_id,user_id,ipaddress) VALUES(%s,%d,%s,%s)', array( $fav_date, $product_id, $fav_user, $fav_ip ) ) );
-	} elseif ( $fav_action == 'delete' ) {
-		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . FAVO_DB_NAME . ' WHERE product_id = %d AND ipaddress = %s AND user_id = %s', array( $product_id, $fav_ip, $fav_user ) ) );
+	$product_id   = sanitize_text_field( $_POST['product_id'] );
+	$fav_action   = sanitize_text_field( $_POST['fav_action'] );
+	$fav_user     = ( is_user_logged_in() ) ? get_current_user_id() : favo_client_ip();
+	
+	$product_favo = get_post_meta( $product_id, 'favo', true );
+	if ( $product_favo ) {
+		if ( $fav_action == 'insert' ) {
+			$new_product_favo = $product_favo . $fav_user . ',';
+		} elseif ( $fav_action == 'delete' ) {
+			$ex_product_favo = explode( ",", trim( $product_favo, "," ) );
+			if ( count( $ex_product_favo ) == 1 ) {
+				$new_product_favo = str_replace( ','.$fav_user.',', '', $product_favo );
+			} else {
+				$new_product_favo = str_replace( $fav_user.',', '', $product_favo );
+			}
+		}	
+	} else if ( $fav_action == 'insert' ) {
+		$new_product_favo = ',' . $fav_user . ',';
 	}
-
-	$favo = get_favo( $product_id );
-
-	echo $favo;
+	update_post_meta( $product_id, 'favo', $new_product_favo );
+	if ( favo_setting( 'favo_count' ) == 'yes' ) {
+		echo get_favo( $product_id );
+	} else {
+		echo '';
+	}
 
 	wp_die();
 }
@@ -57,47 +67,11 @@ function favo_client_ip() {
  * @version 1.0.0
  */
 function get_favo( $product_id ) {
-	global $wpdb;
-	$favorite = $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(ID) FROM ' . FAVO_DB_NAME . ' WHERE product_id = %d', array( $product_id ) ) );
-	return $favorite;
-}
-
-/**
- * function to check favo db is exist
- */
-function is_favo_db_exist() {
-	global $wpdb;
-
-	if ( $wpdb->get_var( "SHOW TABLES LIKE '" . FAVO_DB_NAME . "'" ) != $wpdb->prefix . 'favo' ) {
-		return false;
-	} else {
-		return true;
-	}
-}
-
-/**
- * Method for handle what first plugin doing after active favo plugin
- *
- * @return [type] [description]
- */
-function favo_install() {
-	global $wpdb;
-	global $favo_db_version;
-
-		// Create Table
-	$charset_collate = $wpdb->get_charset_collate();
-	$sql             = 'CREATE TABLE ' . FAVO_DB_NAME . " (
-        `ID` bigint(20) NOT NULL AUTO_INCREMENT,
-        `date_add` datetime NOT NULL,
-        `product_id` bigint(20) NOT NULL,
-        `user_id` bigint(20) DEFAULT NULL,
-        `ipaddress` varchar(30) NOT NULL,
-        PRIMARY KEY  (`ID`)
-    ) $charset_collate;";
-	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-	dbDelta( $sql );
-
-	update_option( 'favo_db_version', $favo_db_version );
+	$product_favo = get_post_meta( $product_id, 'favo', true );
+	if ( $product_favo ) {
+		$ex_product_favo = explode( ",", trim( $product_favo, "," ) );
+		return count( $ex_product_favo );
+	} else return '';
 }
 
 /**
@@ -123,7 +97,6 @@ function favo_default_setting() {
 	$default_settings = array(
 		'enabled'                       => 'yes',
 		'favo_count'                    => 'no',
-		'display_position_button'       => 'after_add_to_cart',
 		'type_active'                   => 'text',
 		'enable_add_success_message'    => 'no',
 		'enable_remove_success_message' => 'no',

@@ -3,7 +3,7 @@
  * Plugin Name: Favo
  * Plugin URI: http://tonjoostudio.com/plugin/favo/
  * Description: Product Favorit
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Tonjoo
  * Author URI: http://tonjoostudio.com/
  * Text Domain: favo
@@ -21,9 +21,6 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-
-global $favo_db_version;
-$favo_db_version = '1.0';
 
 if ( ! class_exists( 'Favo' ) ) {
 
@@ -58,7 +55,6 @@ if ( ! class_exists( 'Favo' ) ) {
 			$this->define_constants();
 			$this->includes();
 
-			add_action( 'wp_enqueue_scripts', array( $this, 'wp_enqueue_scripts' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 			add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( $this, 'plugin_add_settings_link' ) );
 
@@ -71,12 +67,11 @@ if ( ! class_exists( 'Favo' ) ) {
 		 */
 		public function define_constants() {
 			global $wpdb;
-			define( 'FAVO_VERSION', '1.0.0' );
+			define( 'FAVO_VERSION', '1.0.1' );
 			define( 'FAVO_URL', plugins_url( '', __FILE__ ) );
 			define( 'FAVO_LINK', plugin_dir_url( '', __FILE__ ) );
 			define( 'FAVO_PATH', plugin_dir_path( __FILE__ ) );
 			define( 'FAVO_REL_PATH', dirname( plugin_basename( __FILE__ ) ) . '/' );
-			define( 'FAVO_DB_NAME', $wpdb->prefix . 'favo' );
 		}
 
 		/**
@@ -88,8 +83,6 @@ if ( ! class_exists( 'Favo' ) ) {
 			include_once FAVO_PATH . 'inc/helpers.php';
 			include_once FAVO_PATH . 'inc/class-favo-admin-page.php';
 			include_once FAVO_PATH . 'inc/class-favo-front.php';
-			include_once FAVO_PATH . 'libs/class-tonjoo-plugins-upsell.php';
-			include_once FAVO_PATH . 'libs/tonjoo-license/tonjoo-license-handler.php';
 		}
 
 		/**
@@ -98,9 +91,6 @@ if ( ! class_exists( 'Favo' ) ) {
 		 * @return [type] [description]
 		 */
 		public function favo_install() {
-			if ( is_favo_db_exist() == false ) {
-				favo_install();
-			}
 			if ( get_page_by_title( 'Favorite List', ARRAY_A, 'page' ) == null ) {
 				favo_create_page();
 			}
@@ -127,42 +117,13 @@ if ( ! class_exists( 'Favo' ) ) {
 		 * @param string $page
 		 */
 		public function admin_enqueue_scripts( $page ) {
-			wp_enqueue_style( 'favo-admin-style', FAVO_URL . '/assets/css/favo-admin-style.css' );
-
-			wp_enqueue_script( 'favo-admin-script', FAVO_URL . '/assets/js/favo-admin-script.js', array( 'jquery' ) );
-		}
-
-		/**
-		 * Enqueue frontend scripts and styles.
-		 */
-		public function wp_enqueue_scripts() {
-			if ( favo_setting( 'type_active' ) == 'text' ) {
-				$on_val  = favo_setting( 'val_on' );
-				$off_val = favo_setting( 'val_off' );
-			} else {
-				$on_val  = wp_get_attachment_url( favo_setting( 'image_val_on' ) );
-				$off_val = wp_get_attachment_url( favo_setting( 'image_val_off' ) );
+			if ( in_array( $page, array( 'toplevel_page_favo', 'favo_page_favo-settings' ) ) ) {
+				wp_enqueue_style( 'favo-admin-style', FAVO_URL . '/assets/css/favo-admin-style.css' );
+				wp_enqueue_script( 'favo-admin-script', FAVO_URL . '/assets/js/favo-admin-script.js', array( 'jquery' ) );
 			}
-			$favo_object = array(
-				'ajax_url'                      => admin_url( 'admin-ajax.php' ),
-				'button_type'                   => favo_setting( 'type_active' ),
-				'required_login'                => favo_setting( 'required_login' ),
-				'is_login'                      => is_user_logged_in(),
-				'on_val'                        => $on_val,
-				'off_val'                       => $off_val,
-				'favo_count'                    => favo_setting( 'favo_count' ),
-				'enable_add_success_message'    => favo_setting( 'enable_add_success_message' ),
-				'enable_remove_success_message' => favo_setting( 'enable_remove_success_message' ),
-				'add_success_message'           => favo_setting( 'add_success' ),
-				'remove_success_message'        => favo_setting( 'remove_success' ),
-				'required_login_message'        => favo_setting( 'required_login_message' ),
-			);
-
-			wp_enqueue_style( 'favo-style', FAVO_URL . '/assets/css/favo-style.css' );
-
-			wp_enqueue_script( 'favo-script', FAVO_URL . '/assets/js/favo-script.js', array( 'jquery' ) );
-			wp_localize_script( 'favo-script', 'favo_object', $favo_object );
 		}
+
+
 	}
 
 	new Favo();

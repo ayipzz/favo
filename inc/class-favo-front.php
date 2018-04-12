@@ -25,22 +25,64 @@ if ( ! class_exists( 'Favo_Front' ) ) {
 		 */
 		public function __construct() {
 			if ( ! is_admin() ) :
-
-				add_shortcode( 'favo_button', array( $this, 'shortcode' ) );
-				add_shortcode( 'favo_list', array( $this, 'favorite_list' ) );
-
-				if ( is_favo_db_exist() == true && favo_setting( 'enabled' ) == 'yes' ) {
-					if ( ! empty( favo_setting( 'display_on' ) ) && in_array( 'single_product', favo_setting( 'display_on' ) ) ) {
-						add_action( 'woocommerce_after_add_to_cart_button', array( $this, 'favo_single_product' ) );
-					}
-					if ( ! empty( favo_setting( 'display_on' ) ) && in_array( 'loop_product', favo_setting( 'display_on' ) ) ) {
-						add_action( 'woocommerce_after_shop_loop_item', array( $this, 'favo_single_product' ), 15 );
-					}
-				} else {
-
+				if ( favo_setting( 'enabled' ) == 'yes' ) {
+					add_shortcode( 'favo_button', array( $this, 'shortcode' ) );
+					add_shortcode( 'favo_list', array( $this, 'favorite_list' ) );
+					add_action( 'wp_enqueue_scripts', array( $this, 'wp_enqueue_scripts' ) );
+					$this->set_default_favo_button();
 				}
-
 			endif;
+		}
+
+		/**
+		 * Set default favo button set
+		 */
+		public function set_default_favo_button() {
+			if ( ! empty( favo_setting( 'display_on' ) ) && in_array( 'single_product', favo_setting( 'display_on' ) ) ) {
+				add_action( 'woocommerce_after_add_to_cart_button', array( $this, 'favo_add_button' ) );
+			}
+			if ( ! empty( favo_setting( 'display_on' ) ) && in_array( 'loop_product', favo_setting( 'display_on' ) ) ) {
+				add_action( 'woocommerce_after_shop_loop_item', array( $this, 'favo_add_button' ), 15 );
+			}
+		}
+
+		/**
+		 * Enqueue frontend scripts and styles.
+		 */
+		public function wp_enqueue_scripts() {
+			global $post;
+			if ( is_woocommerce() || is_cart() || has_shortcode( $post->post_content, 'favo_list' ) ) {
+				// load enqueue if favo enabled
+				if ( favo_setting( 'enabled' ) == 'yes' ) {
+					if ( favo_setting( 'type_active' ) == 'text' ) {
+						$on_val  = favo_setting( 'val_on' );
+						$off_val = favo_setting( 'val_off' );
+					} else {
+						$on_img_src = wp_get_attachment_image_src( favo_setting( 'image_val_on' ), 'thumbnail', false );
+						$off_img_src = wp_get_attachment_image_src( favo_setting( 'image_val_off' ), 'thumbnail', false );
+						$on_val  = ( !empty( $on_img_src[0] ) ) ? $on_img_src[0] : false;
+						$off_val = ( !empty( $off_img_src[0] ) ) ? $off_img_src[0] : false;
+					}
+					$favo_object = array(
+						'ajax_url'                      => admin_url( 'admin-ajax.php' ),
+						'button_type'                   => favo_setting( 'type_active' ),
+						'required_login'                => favo_setting( 'required_login' ),
+						'is_login'                      => is_user_logged_in(),
+						'on_val'                        => $on_val,
+						'off_val'                       => $off_val,
+						'favo_count'                    => favo_setting( 'favo_count' ),
+						'enable_add_success_message'    => favo_setting( 'enable_add_success_message' ),
+						'enable_remove_success_message' => favo_setting( 'enable_remove_success_message' ),
+						'add_success_message'           => favo_setting( 'add_success' ),
+						'remove_success_message'        => favo_setting( 'remove_success' ),
+						'required_login_message'        => favo_setting( 'required_login_message' ),
+					);
+
+					wp_enqueue_style( 'favo-style', FAVO_URL . '/assets/css/favo-style.css' );
+					wp_enqueue_script( 'favo-script', FAVO_URL . '/assets/js/favo-script.js', array( 'jquery' ) );
+					wp_localize_script( 'favo-script', 'favo_object', $favo_object );
+				}
+			}
 		}
 
 		/**
@@ -55,24 +97,26 @@ if ( ! class_exists( 'Favo_Front' ) ) {
 
 			if ( $product ) :
 
-				$class = isset( $attr['class'] ) ? $attr['class'] : '';
+				$class         = isset( $attr['class'] ) ? $attr['class'] : '';
 				$icon_favorite = 'off';
 
 				// set icon favorite
-				if ( isset( $_COOKIE['favo_product'] ) && in_array( $product->get_id(), json_decode( $_COOKIE['favo_product'] ) ) ) {
+				if ( is_user_logged_in() && $this->get_favorite_by_user( $product->get_id(), get_current_user_id() ) ) {
 					$icon_favorite = 'on';
-				} elseif ( $this->get_favorite_by_user( $product->get_id(), wp_get_current_user()->ID ) ) {
+				} else if ( isset( $_COOKIE['favo_product'] ) && in_array( $product->get_id(), json_decode( $_COOKIE['favo_product'] ) ) ) {
 					$icon_favorite = 'on';
 				}
 
 				// set favo number
 				$favo_count = '';
 				if ( favo_setting( 'favo_count' ) == 'yes' ) {
+					$count_favo = get_favo( $product->get_id() );
 					if ( favo_setting( 'type_active' ) == 'text' ) {
-						$favo_count = '('. get_favo( $product->get_id() ) . ')';
-					} else if ( favo_setting( 'type_active' ) == 'image' ) {
-						$favo_count = '<span class="count">'. get_favo( $product->get_id() ) . '</span>';
+						$favo_count = '(' . $count_favo . ')';
+					} elseif ( favo_setting( 'type_active' ) == 'image' ) {
+						$favo_count = '<span class="count">' . $count_favo . '</span>';
 					}
+					
 				}
 
 				$component = '<span class="favo ' . $class . '" data-product-id="' . $product->get_id() . '">';
@@ -80,11 +124,16 @@ if ( ! class_exists( 'Favo_Front' ) ) {
 				$component .= '<img src="' . FAVO_URL . '/assets/images/loading.gif" class="favo-loading" data-product-id="' . $product->get_id() . '" />';
 
 				if ( favo_setting( 'type_active' ) == 'text' ) : // type text
-					$component .= '<button type="button" class="favo-button ' . $icon_favorite . '" data-product-id="' . $product->get_id() . '">' . favo_setting( 'val_' . $icon_favorite ) . ' '. $favo_count .'</button>';
+					$component .= '<button type="button" class="favo-button ' . $icon_favorite . '" data-product-id="' . $product->get_id() . '">' . favo_setting( 'val_' . $icon_favorite ) . ' ' . $favo_count . '</button>';
 				elseif ( favo_setting( 'type_active' ) == 'image' ) : // type image
-					$favo_class = $icon_favorite == 'on' ? favo_setting( 'image_val_on' ) : favo_setting( 'image_val_off' );
+					$on_img_src = wp_get_attachment_image_src( favo_setting( 'image_val_on' ), 'thumbnail', false );
+					$off_img_src = wp_get_attachment_image_src( favo_setting( 'image_val_off' ), 'thumbnail', false );
+					$on_val  = ( !empty( $on_img_src[0] ) ) ? $on_img_src[0] : false;
+					$off_val = ( !empty( $off_img_src[0] ) ) ? $off_img_src[0] : false;
+
+					$favo_class = $icon_favorite == 'on' ? $on_val : $off_val;
 					$component .= '<span class="favo_button_icon">';
-					$component .= '<img src="' . wp_get_attachment_url( $favo_class ) . '" class="favo-button ' . $icon_favorite . '" data-product-id="' . $product->get_id() . '" />';
+					$component .= '<img src="' . $favo_class . '" class="favo-button ' . $icon_favorite . '" data-product-id="' . $product->get_id() . '" />';
 					$component .= $favo_count;
 					$component .= '</span>';
 				endif;
@@ -105,11 +154,20 @@ if ( ! class_exists( 'Favo_Front' ) ) {
 		 * @version 1.0.0
 		 */
 		public function get_favorite_by_user( $product_id, $user_id ) {
-			global $wpdb;
 			if ( is_user_logged_in() ) {
-				$prepare_favo = $wpdb->prepare( 'SELECT COUNT(ID) FROM ' . FAVO_DB_NAME . ' WHERE product_id = %d AND user_id = %d', array( $product_id, $user_id ) );
-				$favorite     = $wpdb->get_var( $prepare_favo );
-				return $favorite;
+				$product_favo = get_post_meta( $product_id, 'favo', true );
+				if ( $product_favo ) {
+					$ex_product_favo = explode( ",", trim( $product_favo, "," ) );
+					if ( $ex_product_favo ) {
+						if ( array_search( $user_id, $ex_product_favo ) != -1 ) {
+							return 1;
+						} else {
+							return 0;
+						}
+					} else {
+						return 0;
+					}
+				} else return 0;
 			}
 		}
 
@@ -118,19 +176,14 @@ if ( ! class_exists( 'Favo_Front' ) ) {
 		 *
 		 * @return [type] [description]
 		 */
-		public function get_favorite_product_by_user( $user_id, $result = '' ) {
+		public function get_favorite_product_by_user( $user_id ) {
 			global $wpdb;
-			if ( is_user_logged_in() ) {
-				if ( $result == 'list' ) {
-					$favorite = $wpdb->get_results( $wpdb->prepare( 'SELECT product_id FROM ' . FAVO_DB_NAME . ' WHERE user_id = %s', $user_id ), ARRAY_A );
-				} else {
-					$favorite = $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(ID) FROM ' . FAVO_DB_NAME . ' WHERE user_id = %s', $user_id ) );
-				}
-				return $favorite;
-			}
+			$favo_prepare = $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = %s AND meta_value LIKE %s", "favo", '%,'.$wpdb->esc_like($user_id).',%' );
+			$favo = $wpdb->get_results( $favo_prepare, ARRAY_A );
+			return $favo;
 		}
 
-		public function favo_single_product() {
+		public function favo_add_button() {
 			echo do_shortcode( '[favo_button]' );
 		}
 
@@ -143,17 +196,20 @@ if ( ! class_exists( 'Favo_Front' ) ) {
 			global $wpdb;
 
 			$list_favorite = array();
-
-			if ( $this->get_favorite_product_by_user( wp_get_current_user()->ID ) ) {
-				// get from DB
-				if ( $get_favorite = $this->get_favorite_product_by_user( wp_get_current_user()->ID, 'list' ) ) {
-					$list_favorite = array();
-					foreach ( $get_favorite as $favorite ) {
-						array_push( $list_favorite, $favorite['product_id'] );
+			
+			if( favo_setting( 'required_login' ) == 'yes' ) {
+				if ( ! is_user_logged_in() ) {
+					echo apply_filters( 'woocommerce_checkout_must_be_logged_in_message', __( 'You must be logged in.', 'woocommerce' ) );
+					return;
+				}
+			}
+			if ( is_user_logged_in() ) {
+				if ( $get_favo = $this->get_favorite_product_by_user( get_current_user_id() ) ) {
+					foreach ( $get_favo as $favo ) {
+						array_push( $list_favorite, $favo['post_id'] );
 					}
 				}
 			} elseif ( isset( $_COOKIE['favo_product'] ) ) {
-				// get from cookie
 				$list_favorite = json_decode( $_COOKIE['favo_product'] );
 			}
 

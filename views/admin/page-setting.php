@@ -1,5 +1,5 @@
 <div class="wrap">
- 	<h2>Settings</h2><br />
+ 	<h2>Favo <span class="favo-version"><?php echo FAVO_VERSION; ?></span></h2><br />
 	<div id="favo-setting">
 		<form method='post'>
 			<div class="form-section">
@@ -28,31 +28,9 @@
 						<input type="checkbox" name="favo_count" id="favo_count" value="yes" <?php echo favo_setting('favo_count') == 'yes' ? 'checked' : ''; ?> />
 					</div>
 					<div class="helper">
-						Displays the number of favorites in each product <i>(beta)</i>
+						Displays the number of favorites in each product <br /><b>! this will impact on the speed of your website load</b>
 					</div>
 				</div>
-				<div class="input-row">
-					<label for="favo_required_login">Required Login</label>
-					<div class="input-field">
-						<input type="checkbox" name="favo_required_login" id="favo_required_login" value="yes" <?php echo favo_setting('required_login') == 'yes' ? 'checked' : ''; ?> />
-					</div>
-					<div class="helper">
-						User
-					</div>
-				</div>
-				<!-- <div class="input-row">
-					<label for="favo_display_on">Display Button Position</label>
-					<div class="input-field">
-						<select name="display_position_button" id="display_position_button">
-							<option value="after_add_to_cart" <?php echo !empty( favo_setting('display_position_button') ) && 'after_add_to_cart' == favo_setting('display_position_button') ? 'selected' : ''; ?> >After Add to Cart Button</option>
-							<option value="product_image" <?php echo !empty( favo_setting('display_position_button') ) && 'product_image' == favo_setting('display_position_button') ? 'selected' : ''; ?> >Product Image</option>
-						</select>
-					</div>
-					<div class="helper">
-						Choose position where your favorite button will appear.<br />
-						<code><b>Product Image :</b> only work on product loop</code>
-					</div>
-				</div> -->
 				<div class="input-row">
 					<label for="favo_display_on">Display Button On</label>
 					<div class="input-field">
@@ -136,8 +114,8 @@
 				<div class="input-row">
 					<label for="favo_enabled">Add Success Message</label>
 					<div class="input-field">
-						<input type="checkbox" name="enable_add_success_message" value="yes" <?php echo favo_setting('enable_add_success_message') == 'yes' ? 'checked' : ''; ?>> Enable<br /><br />
-						<input type="text" name="add_success_message" value="<?php echo favo_setting('add_success'); ?>">
+						<input type="checkbox" name="enable_add_success_message" class="favo-check" data-target="add_success_message" value="yes" <?php echo favo_setting('enable_add_success_message') == 'yes' ? 'checked' : ''; ?>> Enable<br /><br />
+						<input type="text" name="add_success_message" id="add_success_message" value="<?php echo favo_setting('add_success'); ?>">
 					</div>
 					<div class="helper">
 						The message will appear when the product has been successfully added to the favorites list
@@ -146,7 +124,7 @@
 				<div class="input-row">
 					<label for="favo_display_on">Remove Success Message</label>
 					<div class="input-field">
-						<input type="checkbox" name="enable_remove_success_message" value="yes" <?php echo favo_setting('enable_remove_success_message') == 'yes' ? 'checked' : ''; ?>> Enable<br /><br />
+						<input type="checkbox" name="enable_remove_success_message" class="favo-check" data-target="remove_success_message" value="yes" <?php echo favo_setting('enable_remove_success_message') == 'yes' ? 'checked' : ''; ?>> Enable<br /><br />
 						<input type="text" name="remove_success_message" value="<?php echo favo_setting('remove_success'); ?>">
 					</div>
 					<div class="helper">
@@ -156,10 +134,11 @@
 				<div class="input-row">
 					<label for="favo_display_on">Required Login Message</label>
 					<div class="input-field">
+						<input type="checkbox" name="favo_required_login" class="favo-check" data-target="remove_success_message" value="yes" <?php echo favo_setting('required_login') == 'yes' ? 'checked' : ''; ?> /> Enable<br /><br />
 						<input type="text" name="required_login_message" value="<?php echo favo_setting('required_login_message'); ?>">
 					</div>
 					<div class="helper">
-						The message will appear when the product was successfully removed from the favorites list
+						The message will appear when the favorite required login
 					</div>
 				</div>
 			</div>
