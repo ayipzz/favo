@@ -51,7 +51,7 @@ if ( ! class_exists( 'Favo_Front' ) ) {
 		 */
 		public function wp_enqueue_scripts() {
 			global $post;
-			if ( is_woocommerce() || is_cart() || has_shortcode( $post->post_content, 'favo_list' ) || apply_filters( 'favo_allow_enqueue_scripts', array() ) ) {
+			if ( apply_filters( 'favo_allow_enqueue_scripts', array( is_woocommerce(), is_cart(), has_shortcode( $post->post_content, 'favo_list' ) ) ) ) {
 				// load enqueue if favo enabled
 				if ( favo_setting( 'enabled' ) == 'yes' ) {
 					if ( favo_setting( 'type_active' ) == 'text' ) {
