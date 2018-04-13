@@ -3,7 +3,7 @@
  * Plugin Name: Favo
  * Plugin URI: http://tonjoostudio.com/plugin/favo/
  * Description: Product Favorit
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: Tonjoo
  * Author URI: http://tonjoostudio.com/
  * Text Domain: favo
@@ -67,7 +67,7 @@ if ( ! class_exists( 'Favo' ) ) {
 		 */
 		public function define_constants() {
 			global $wpdb;
-			define( 'FAVO_VERSION', '1.0.1' );
+			define( 'FAVO_VERSION', '1.0.2' );
 			define( 'FAVO_URL', plugins_url( '', __FILE__ ) );
 			define( 'FAVO_LINK', plugin_dir_url( '', __FILE__ ) );
 			define( 'FAVO_PATH', plugin_dir_path( __FILE__ ) );
