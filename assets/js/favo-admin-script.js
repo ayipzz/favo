@@ -66,51 +66,24 @@ jQuery(function($){
 	});
 
 
-});
-
-// about tabs
-jQuery(function($) {
-	var active_tab;
-	var wrapper = "#favo-page-wrap";
-
-	if (window.location.hash) {
-		set_active_tab(getHash());
-	} else {
-		set_active_tab_first();
-	}
-
-	$(window).on('hashchange', function(){
-		set_active_tab(getHash());
+	$(".favo-menu li a").on("click", function(){
+		favo_change_section( $(this).attr('href') );
 	});
 
-	function getHash() {
-		var hash = window.location.hash;
-		if (!hash) return;
-		if (hash.indexOf('#') === 0) {
-			return hash.replace('#','');
-		}
+	if ( $(location).attr('hash') ) {
+		favo_change_section( $(location).attr('hash') );
+	} else {
+		favo_change_section( '#tab-general' );
 	}
 
-	function set_active_tab(section) {
-		$( wrapper + ' .nav-tab-wrapper .nav-tab').each(function() {
-			$(this).removeClass('nav-tab-active');
-		});
-		$( wrapper + ' .nav-tab-wrapper .nav-tab-'+section).addClass('nav-tab-active');
-		$( wrapper + ' .content .tab-content').each(function() {
-			$(this).removeClass('active');
-		});
-		$(wrapper + ' .content #tab-'+section).addClass('active');
+	function favo_change_section( id ) {
+		$(".favo-menu li a").removeClass("active");
+
+		$(".favo-menu li a[href=\""+id+"\"]").addClass("active");
+		$("#favo-setting .form-section").hide();
+		$("#favo-setting "+id).show();
 	}
 
-	function set_active_tab_first() {
-		var first_menu = $(wrapper + ' .nav-tab-wrapper .nav-tab:first-child').attr('href');
-		if (first_menu) {
-			if(window.history.pushState) {
-				window.history.pushState(null, null, first_menu);
-			} else {
-				window.location.hash = first_menu;
-			}
-			set_active_tab(getHash());
-		}
-	}
+	$(".my-color-field").wpColorPicker();
+
 });

@@ -118,8 +118,9 @@ if ( ! class_exists( 'Favo' ) ) {
 		 */
 		public function admin_enqueue_scripts( $page ) {
 			if ( in_array( $page, array( 'toplevel_page_favo', 'favo_page_favo-settings' ) ) ) {
+				wp_enqueue_style( 'wp-color-picker' );
 				wp_enqueue_style( 'favo-admin-style', FAVO_URL . '/assets/css/favo-admin-style.css' );
-				wp_enqueue_script( 'favo-admin-script', FAVO_URL . '/assets/js/favo-admin-script.js', array( 'jquery' ) );
+				wp_enqueue_script( 'favo-admin-script', FAVO_URL . '/assets/js/favo-admin-script.js', array( 'jquery', 'wp-color-picker' ) );
 			}
 		}
 

@@ -3,11 +3,56 @@
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
+#favo-setting .favo-menu {
+	margin-bottom: 6px;
+}
+#favo-setting .favo-menu li {
+    display: inline-block;
+}
+#favo-setting .favo-menu li a {
+    padding: 10px 15px 15px;
+    cursor: pointer;
+    text-decoration: none;
+    color: #666;
+    font-weight: bold;
+    border: 1px solid transparent;
+}
+#favo-setting .favo-menu li a:hover {
+	color: #000;
+}
+#favo-setting .favo-menu li a.active {
+    background: #fff;
+    color: #f3056e;
+    border-radius: 5px 5px 0 0;
+    font-weight: bold;
+    border: 1px solid #e1e2e3;
+    border-bottom: 0;
+    position: relative;
+}
+#favo-setting .favo-menu li a.active:after {
+	content: '';
+	position: absolute;
+	width: 50%;
+	height: 25px;
+	bottom: -3px;
+	right: 76px;
+	z-index: -1;
+	-webkit-transform: skew(30deg);
+	-moz-transform: skew(30deg);
+	transform: skew(30deg);
+	-webkit-box-shadow: 89px 0 19px 13px rgba(0,0,0,.05);
+	-moz-box-shadow: 89px 0 19px 13px rgba(0,0,0,.05);
+	box-shadow: 89px 0 19px 13px rgba(0,0,0,.05);
+}
 #favo-setting .form-section {
 	background-color: #fff;
 	margin-bottom: 15px;
 	font-size: 0;
-	border: 1px solid #eee;
+	border: 1px solid #e1e2e3;
+	border-bottom: 0;
+	box-shadow: 0 1px 1px rgba(0,0,0,.05);
+	border-radius: 0 5px 5px 5px;
+	display: none;
 }
 #favo-setting .form-section .form-section-title {
 	padding: 10px;
@@ -19,6 +64,7 @@
 	font-size: 0;
 	padding-top: 10px;
 	padding: 15px;
+	border-bottom: 1px solid #e1e2e3;
 }
 #favo-setting .form-section .input-row > * {
 	display: inline-block;
@@ -28,6 +74,7 @@
 }
 #favo-setting .form-section .input-row > label {
 	width: 20%;
+	font-weight: bold;
 }
 #favo-setting .form-section .input-field {
 	width: 30%;
@@ -41,6 +88,14 @@
 #favo-setting .form-section .helper {
 	width: 50%;
 	opacity: 0.7;
+}
+#favo-setting .form-section .helper .text-danger {
+	color: red;
+	font-weight: bold;
+}
+#favo-setting .form-section .helper code {
+	background: yellow;
+    font-weight: bold;
 }
 #favo-setting .form-section .helper-full {
 	padding-top: 30px;
@@ -62,4 +117,73 @@
     font-weight: bold;
     padding: 2px 4px;
     border-radius: 4px;
+}
+ /* The favo-switch - the box around the slider */
+.favo-switch {
+  	position: relative;
+  	display: inline-block;
+  	width: 27px;
+	height: 16px;
+}
+
+/* Hide default HTML checkbox */
+.favo-switch input {display:none;}
+
+/* The slider */
+.favo-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.favo-slider:before {
+  position: absolute;
+  content: "";
+  height: 10px;
+  width: 10px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .favo-slider {
+  background-color: #f3056e;
+}
+
+input:focus + .favo-slider {
+  box-shadow: 0 0 1px #f3056e;
+}
+
+input:checked + .favo-slider:before {
+  -webkit-transform: translateX(10px);
+  -ms-transform: translateX(10px);
+  transform: translateX(10px);
+}
+
+/* Rounded favo-sliders */
+.favo-slider.round {
+  border-radius: 34px;
+}
+
+.favo-slider.round:before {
+  border-radius: 50%;
+} 
+.favo-default-table {
+	border-collapse: collapse;
+	width: 100%;
+}
+.favo-default-table td, .favo-default-table th {
+    border: 1px solid #e1e2e3;
+    padding: 5px 10px;
+}
+.favo-default-table th {
+    background: #f3f4f5;
 }
